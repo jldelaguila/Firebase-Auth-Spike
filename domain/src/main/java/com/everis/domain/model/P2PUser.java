@@ -6,10 +6,10 @@ package com.everis.domain.model;
 
 public class P2PUser {
 
-    String phoneNumber;
-    String firstName;
-    String lastName;
-    boolean enable;
+    private String phoneNumber;
+    private String firstName;
+    private String lastName;
+    private boolean enable;
 
     public String getPhoneNumber() {
         return phoneNumber;
@@ -45,6 +45,6 @@ public class P2PUser {
 
     @Override
     public String toString() {
-        return this.firstName + " " + lastName;
+        return this.firstName + " " + this.lastName;
     }
 }

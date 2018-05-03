@@ -64,15 +64,26 @@ public class DatabaseDataRepository implements DatabaseRepository{
                 new Func1<DataSnapshot, P2PUser>() {
                     @Override
                     public P2PUser call(DataSnapshot snapshot) {
-                        if(snapshot.exists()){
-                            return snapshot.getValue(P2PUser.class);
-                        }
-                        else{
-                            return null;
-                        }
+                        return snapshot.getValue(P2PUser.class);
                     }
                 }
         );
+    }
+
+    @Override
+    public Observable<P2PUser> getUserByPhoneQuery(String phoneNumber) {
+        Query userQuery = FirebaseDatabase.getInstance().getReference().child("p2p_users").orderByChild("phoneNumber").equalTo(phoneNumber);
+        return database.observeValueEvent(userQuery).map(new Func1<DataSnapshot, P2PUser>() {
+            @Override
+            public P2PUser call(DataSnapshot snapshot) {
+                P2PUser user = null;
+                for(DataSnapshot snapshotChild : snapshot.getChildren())
+                {
+                    user = snapshotChild.getValue(P2PUser.class);
+                }
+                return user;
+            }
+        });
     }
 
     @Override

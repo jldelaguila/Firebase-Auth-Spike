@@ -15,6 +15,7 @@ public interface DatabaseRepository {
     Observable<IntroMessage> getIntroMessage();
     Observable<Boolean> getUserEnabled(String userUid);
     Observable<P2PUser> getUserByPhoneReference(String phoneNumber);
+    Observable<P2PUser> getUserByPhoneQuery(String phoneNumber);
     Observable<Void> observeRemoveValue(String collection, String node);
 
 }
