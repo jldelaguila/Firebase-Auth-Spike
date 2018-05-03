@@ -11,5 +11,6 @@ public interface HomePresenter extends BasePresenter {
     void loadIntroMessage();
     void logOut();
     void deleteUser();
+    void loadUserByPhoneReference(String phoneNumber);
 
 }

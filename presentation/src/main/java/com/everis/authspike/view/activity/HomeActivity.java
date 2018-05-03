@@ -41,6 +41,7 @@ public class HomeActivity extends BaseActivity implements HomeView{
         presenter.loadUserState();
         presenter.loadIntroMessage();
         presenter.loadUserEnabled(userUid);
+        presenter.loadUserByPhoneReference("993441766");
     }
 
     @Override

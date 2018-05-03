@@ -11,9 +11,11 @@ import com.everis.data.repository.UserDataRepository;
 import com.everis.domain.interactor.DeleteUser;
 import com.everis.domain.interactor.GetEnabledUser;
 import com.everis.domain.interactor.GetIntroMessage;
+import com.everis.domain.interactor.GetUserByPhoneReference;
 import com.everis.domain.interactor.GetUserState;
 import com.everis.domain.interactor.LogOut;
 import com.everis.domain.model.IntroMessage;
+import com.everis.domain.model.P2PUser;
 import com.everis.domain.model.User;
 
 import rx.Subscriber;
@@ -32,6 +34,7 @@ public class HomePresenterImpl implements HomePresenter {
     private DeleteUser deleteUserUseCase;
     private GetIntroMessage getIntroMessageUseCase;
     private GetEnabledUser getEnabledUserUseCase;
+    private GetUserByPhoneReference userByRefUseCase;
 
     public HomePresenterImpl(HomeView view) {
         this.view = view;
@@ -40,6 +43,7 @@ public class HomePresenterImpl implements HomePresenter {
         deleteUserUseCase = new DeleteUser(new UIThread(), new UserDataRepository());
         getIntroMessageUseCase = new GetIntroMessage(new UIThread(), new DatabaseDataRepository());
         getEnabledUserUseCase = new GetEnabledUser(new UIThread(), new DatabaseDataRepository());
+        userByRefUseCase = new GetUserByPhoneReference(new UIThread(), new DatabaseDataRepository());
     }
 
     @Override
@@ -64,6 +68,7 @@ public class HomePresenterImpl implements HomePresenter {
         deleteUserUseCase.unsuscribe();
         getIntroMessageUseCase.unsuscribe();
         getEnabledUserUseCase.unsuscribe();
+        userByRefUseCase.unsuscribe();
     }
 
     @Override
@@ -91,6 +96,12 @@ public class HomePresenterImpl implements HomePresenter {
     public void deleteUser() {
         view.showLoading();
         deleteUserUseCase.execute(new DeleteUserSubscriber());
+    }
+
+    @Override
+    public void loadUserByPhoneReference(String phoneNumber) {
+        userByRefUseCase.bindParams(phoneNumber);
+        userByRefUseCase.execute(new GetUserByPhoneRefSubscriber());
     }
 
     private class UserStateSubscriber extends Subscriber<User> {
@@ -186,6 +197,31 @@ public class HomePresenterImpl implements HomePresenter {
         public void onNext(Boolean enabled) {
             if(!enabled)
                 logOut();
+        }
+    }
+
+    private class GetUserByPhoneRefSubscriber extends Subscriber<P2PUser>{
+
+        @Override
+        public void onStart() {
+            super.onStart();
+            Log.d(TAG, "*******************Inicio de busqueda por referencia*******************");
+        }
+
+        @Override
+        public void onCompleted() {
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d(TAG, "*******************Ocurrio un error en la busqueda por referencia*******************");
+            Log.d(TAG, e.getLocalizedMessage());
+        }
+
+        @Override
+        public void onNext(P2PUser user) {
+            Log.d(TAG, "Usuario encontrado: " + user.toString());
+
         }
     }
 

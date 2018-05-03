@@ -4,13 +4,18 @@ import com.everis.data.model.IntroMessageEntity;
 import com.everis.data.model.IntroMessageEntityDataMapper;
 import com.everis.data.network.firebase.FirebaseDBImpl;
 import com.everis.domain.model.IntroMessage;
+import com.everis.domain.model.P2PUser;
 import com.everis.domain.repository.DatabaseRepository;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.HashMap;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 
 /**
@@ -48,6 +53,44 @@ public class DatabaseDataRepository implements DatabaseRepository{
                 }
                 else
                     return false;
+            }
+        });
+    }
+
+    @Override
+    public Observable<P2PUser> getUserByPhoneReference(String phoneNumber) {
+
+        return database.observeValueEvent(FirebaseDatabase.getInstance().getReference().child("p2p_users").child(phoneNumber)).map(
+                new Func1<DataSnapshot, P2PUser>() {
+                    @Override
+                    public P2PUser call(DataSnapshot snapshot) {
+                        if(snapshot.exists()){
+                            return snapshot.getValue(P2PUser.class);
+                        }
+                        else{
+                            return null;
+                        }
+                    }
+                }
+        );
+    }
+
+    @Override
+    public Observable<Void> observeRemoveValue(final String collection, final String innerNode) {
+        return Observable.create(new Observable.OnSubscribe<Void>() {
+            @Override
+            public void call(final Subscriber<? super Void> subscriber) {
+                FirebaseDatabase.getInstance().getReference().child(collection).child(innerNode).removeValue(new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if(databaseError!=null){
+                            subscriber.onError(databaseError.toException());
+                        }
+                        else{
+                            subscriber.onNext(null);
+                        }
+                    }
+                });
             }
         });
     }
