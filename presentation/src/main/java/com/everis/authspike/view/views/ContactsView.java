@@ -12,4 +12,5 @@ public interface ContactsView extends BaseView {
 
     void displayBatchContacts(List<LocalContact> contacts);
 
+    void setSync(String phoneNumber);
 }

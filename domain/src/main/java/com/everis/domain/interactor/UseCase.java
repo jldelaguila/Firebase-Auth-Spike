@@ -30,7 +30,6 @@ public abstract class UseCase {
         this.subscription = this.buildUseCaseObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(postExecutorThread.getScheduler())
-                .delay(2, TimeUnit.SECONDS,postExecutorThread.getScheduler())
                 .subscribe(subscriber);
     }
 

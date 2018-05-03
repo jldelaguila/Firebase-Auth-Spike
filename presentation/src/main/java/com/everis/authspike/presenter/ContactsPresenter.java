@@ -8,5 +8,5 @@ public interface ContactsPresenter extends BasePresenter {
 
     void getLocalContactBatch();
     void getLocalContactsIndiv();
-
+    void syncUser(String number);
 }

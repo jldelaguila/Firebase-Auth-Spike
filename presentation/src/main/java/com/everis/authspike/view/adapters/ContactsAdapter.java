@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.everis.authspike.R;
+import com.everis.authspike.model.ContactModel;
 import com.everis.domain.model.LocalContact;
 
 import java.util.ArrayList;
@@ -22,18 +23,28 @@ import butterknife.ButterKnife;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.LocalContactViewHolder> {
 
-    List<LocalContact> contacts;
+    private List<ContactModel> contacts;
 
     public ContactsAdapter() {
         contacts = new ArrayList<>();
     }
 
-    public List<LocalContact> getContacts() {
+    public List<ContactModel> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<LocalContact> contacts) {
+    public void setContacts(List<ContactModel> contacts) {
         this.contacts = contacts;
+        notifyDataSetChanged();
+    }
+
+    public void updateUser(String phoneNumber) {
+        for(ContactModel contactModel :contacts){
+            if(contactModel.getNumber().equals(phoneNumber)){
+                contactModel.setCloudUser(true);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     class LocalContactViewHolder extends RecyclerView.ViewHolder{
@@ -49,8 +60,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.LocalC
             ButterKnife.bind(this, itemView);
         }
 
-        void bindView(LocalContact contact){
-            nameTv.setText(contact.getName());
+        void bindView(ContactModel contact){
+            nameTv.setText(String.format("%s %s", contact.getName(), contact.isCloudUser()));
             numberTv.setText(contact.getNumber());
 
         }
@@ -66,7 +77,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.LocalC
 
     @Override
     public void onBindViewHolder(@NonNull LocalContactViewHolder holder, int position) {
-        LocalContact currentContact = contacts.get(position);
+        ContactModel currentContact = contacts.get(position);
         holder.bindView(currentContact);
     }
 

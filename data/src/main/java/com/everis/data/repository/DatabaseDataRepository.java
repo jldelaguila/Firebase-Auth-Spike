@@ -80,6 +80,7 @@ public class DatabaseDataRepository implements DatabaseRepository{
                 for(DataSnapshot snapshotChild : snapshot.getChildren())
                 {
                     user = snapshotChild.getValue(P2PUser.class);
+                    user.setId(Long.parseLong(snapshotChild.getKey()));
                 }
                 return user;
             }

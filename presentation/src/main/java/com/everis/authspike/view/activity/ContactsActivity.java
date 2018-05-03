@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.everis.authspike.R;
+import com.everis.authspike.model.ContactModel;
+import com.everis.authspike.model.ContactModelDataMapper;
 import com.everis.authspike.presenter.ContactsPresenter;
 import com.everis.authspike.presenter.ContactsPresenterImpl;
 import com.everis.authspike.view.adapters.ContactsAdapter;
@@ -67,8 +69,15 @@ public class ContactsActivity extends BaseActivity implements ContactsView, Perm
 
     @Override
     public void displayBatchContacts(List<LocalContact> contacts) {
-        adapter.setContacts(contacts);
-        adapter.notifyDataSetChanged();
+        for(LocalContact contact:contacts){
+            presenter.syncUser(contact.getNumber());
+        }
+        adapter.setContacts(ContactModelDataMapper.transform(contacts));
+    }
+
+    @Override
+    public void setSync(String phoneNumber) {
+       adapter.updateUser(phoneNumber);
     }
 
     @Override

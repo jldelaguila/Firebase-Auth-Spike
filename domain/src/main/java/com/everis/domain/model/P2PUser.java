@@ -6,6 +6,7 @@ package com.everis.domain.model;
 
 public class P2PUser {
 
+    private Long id;
     private String phoneNumber;
     private String firstName;
     private String lastName;
@@ -41,6 +42,14 @@ public class P2PUser {
 
     public void setEnable(boolean enable) {
         this.enable = enable;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
