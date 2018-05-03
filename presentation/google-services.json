@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "908172976640",
+    "firebase_url": "https://fir-auth-spike.firebaseio.com",
+    "project_id": "fir-auth-spike",
+    "storage_bucket": "fir-auth-spike.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908172976640:android:327a6b65ab02e572",
+        "android_client_info": {
+          "package_name": "com.everis.authspike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908172976640-runupcvgq2aso7vt14p8kn2h48r0csu4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.everis.authspike",
+            "certificate_hash": "245e3963f8e7cb73f076c5cc8195a9d51371480f"
+          }
+        },
+        {
+          "client_id": "908172976640-e4pqlgijqhnti13r2a32uarr7j5dn9sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMFRimJY2ZXU4LT1zH1BFyBoV0U6cb9Pw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908172976640-e4pqlgijqhnti13r2a32uarr7j5dn9sf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
