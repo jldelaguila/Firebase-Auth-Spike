@@ -133,6 +133,7 @@ public class ContactsPresenterImpl implements ContactsPresenter {
                 Log.d(TAG, "Contactos retornados de P2P: " + p2PUser.toString());
                 view.setSync(p2PUser.getPhoneNumber());
             }
+            request(1);
         }
 
 

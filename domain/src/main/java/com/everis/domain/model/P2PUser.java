@@ -54,6 +54,6 @@ public class P2PUser {
 
     @Override
     public String toString() {
-        return this.firstName + " " + this.lastName;
+        return this.phoneNumber;
     }
 }

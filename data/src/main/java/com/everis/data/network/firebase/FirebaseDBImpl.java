@@ -103,6 +103,7 @@ public class FirebaseDBImpl implements FirebaseDB {
                     }
                     else{
                         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("p2p_users").child(localContact.getNumber());
+                        Log.d("REFERENCEQ", ref.toString());
                         ref.addValueEventListener(listener);
                     }
 

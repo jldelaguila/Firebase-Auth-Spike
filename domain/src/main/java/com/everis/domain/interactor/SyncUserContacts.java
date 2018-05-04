@@ -29,6 +29,6 @@ public class SyncUserContacts extends UseCase {
 
     @Override
     protected Observable buildUseCaseObservable() {
-        return this.repository.syncUserContacts(this.queryContacts, this.byQuery).window(5);
+        return this.repository.syncUserContacts(this.queryContacts, this.byQuery).onBackpressureBuffer();
     }
 }

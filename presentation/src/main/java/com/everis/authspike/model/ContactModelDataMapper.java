@@ -1,5 +1,7 @@
 package com.everis.authspike.model;
 
+import android.util.Log;
+
 import com.everis.domain.model.LocalContact;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ public class ContactModelDataMapper {
         contactModel.setName(contact.getName());
         contactModel.setNumber(contact.getNumber());
         contactModel.setCloudUser(false);
+        Log.d("MAPPER", "Nombre: " + contactModel.getName() + " y numero: " + contactModel.getNumber());
         return contactModel;
     }
 
