@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.everis.authspike.R;
@@ -55,14 +56,18 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.LocalC
         @BindView(R.id.tvNumber)
         TextView numberTv;
 
+        @BindView(R.id.status_image)
+        ImageView statusIv;
+
         public LocalContactViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
         void bindView(ContactModel contact){
-            nameTv.setText(String.format("%s %s", contact.getName(), contact.isCloudUser()));
+            nameTv.setText(contact.getName());
             numberTv.setText(contact.getNumber());
+            statusIv.setImageResource(contact.isCloudUser()?R.drawable.user_circle:R.drawable.not_user_circle);
 
         }
     }

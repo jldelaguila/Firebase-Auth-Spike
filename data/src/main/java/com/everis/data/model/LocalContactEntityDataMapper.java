@@ -11,7 +11,7 @@ public class LocalContactEntityDataMapper {
     public static LocalContact transform(LocalContactEntity localContactEntity){
         LocalContact localContact = new LocalContact();
         localContact.setName(localContactEntity.getName());
-        localContact.setNumber(localContactEntity.getNumber().replace(" ",""));
+        localContact.setNumber(localContactEntity.getNumber().replaceAll("[^0-9]",""));
         return localContact;
     }
 

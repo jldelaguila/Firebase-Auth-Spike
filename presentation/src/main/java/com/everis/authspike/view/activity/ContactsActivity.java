@@ -51,9 +51,13 @@ public class ContactsActivity extends BaseActivity implements ContactsView, Perm
         contactsRecycler.setAdapter(adapter);
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         contactsRecycler.addItemDecoration(itemDecoration);
-        Dexter.withActivity(this).withPermission(Manifest.permission.READ_CONTACTS).withListener(this).onSameThread().check();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Dexter.withActivity(this).withPermission(Manifest.permission.READ_CONTACTS).withListener(this).onSameThread().check();
+    }
 
     @Override
     public void showLoading() {
@@ -89,6 +93,5 @@ public class ContactsActivity extends BaseActivity implements ContactsView, Perm
 
     @Override
     public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
     }
 }
