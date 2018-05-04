@@ -86,7 +86,8 @@ public class FirebaseDBImpl implements FirebaseDB {
                             subscriber.onNext(dataSnapshot);
                         }
                         else{
-                            subscriber.onNext(null);
+                            Log.d("KEYS NULLOS?", dataSnapshot.getKey());
+                            subscriber.onNext(dataSnapshot);
                         }
                     }
 

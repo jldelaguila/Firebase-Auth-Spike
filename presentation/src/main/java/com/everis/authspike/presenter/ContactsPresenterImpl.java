@@ -131,7 +131,7 @@ public class ContactsPresenterImpl implements ContactsPresenter {
 
             if(p2PUser!=null){
                 Log.d(TAG, "Contactos retornados de P2P: " + p2PUser.toString());
-                view.setSync(p2PUser.getPhoneNumber());
+                view.setSync(p2PUser);
             }
             request(1);
         }

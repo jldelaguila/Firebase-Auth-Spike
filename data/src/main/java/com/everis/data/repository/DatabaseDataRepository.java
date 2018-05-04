@@ -96,10 +96,13 @@ public class DatabaseDataRepository implements DatabaseRepository{
             return database.observeBatchContactsValueEventListener(localContacts, isByQuery).map(new Func1<DataSnapshot, P2PUser>() {
                 @Override
                 public P2PUser call(DataSnapshot snapshot) {
-                    if(snapshot!=null && snapshot.exists())
+                    if(snapshot.exists())
                         return snapshot.getValue(P2PUser.class);
-                    else
-                        return null;
+                    else{
+                        P2PUser inactiveUser = new P2PUser();
+                        inactiveUser.setPhoneNumber(snapshot.getKey());
+                        return inactiveUser;
+                    }
                 }
             });
         }

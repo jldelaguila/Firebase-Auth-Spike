@@ -15,6 +15,7 @@ import com.everis.authspike.presenter.ContactsPresenterImpl;
 import com.everis.authspike.view.adapters.ContactsAdapter;
 import com.everis.authspike.view.views.ContactsView;
 import com.everis.domain.model.LocalContact;
+import com.everis.domain.model.P2PUser;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -77,8 +78,8 @@ public class ContactsActivity extends BaseActivity implements ContactsView, Perm
     }
 
     @Override
-    public void setSync(String phoneNumber) {
-       adapter.updateUser(phoneNumber);
+    public void setSync(P2PUser user) {
+       adapter.updateUser(user);
     }
 
     @Override

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.everis.authspike.R;
 import com.everis.authspike.model.ContactModel;
 import com.everis.domain.model.LocalContact;
+import com.everis.domain.model.P2PUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.LocalC
         notifyDataSetChanged();
     }
 
-    public void updateUser(String phoneNumber) {
+    public void updateUser(P2PUser p2PUser) {
         for(ContactModel contactModel :contacts){
-            if(contactModel.getNumber().equals(phoneNumber)){
-                contactModel.setCloudUser(true);
+            if(contactModel.getNumber().equals(p2PUser.getPhoneNumber())){
+                contactModel.setCloudUser(p2PUser.isEnable());
             }
         }
         notifyDataSetChanged();
