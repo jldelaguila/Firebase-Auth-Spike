@@ -4,6 +4,7 @@ import com.everis.data.model.IntroMessageEntity;
 import com.everis.data.model.IntroMessageEntityDataMapper;
 import com.everis.data.network.firebase.FirebaseDBImpl;
 import com.everis.domain.model.IntroMessage;
+import com.everis.domain.model.LocalContact;
 import com.everis.domain.model.P2PUser;
 import com.everis.domain.repository.DatabaseRepository;
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -72,19 +74,35 @@ public class DatabaseDataRepository implements DatabaseRepository{
 
     @Override
     public Observable<P2PUser> getUserByPhoneQuery(String phoneNumber) {
-        Query userQuery = FirebaseDatabase.getInstance().getReference().child("p2p_users").orderByChild("phoneNumber").equalTo(phoneNumber);
-        return database.observeValueEvent(userQuery).map(new Func1<DataSnapshot, P2PUser>() {
+        return database.observeValueEvent(FirebaseDatabase.getInstance().getReference().child("p2p_users").orderByChild("phoneNumber").equalTo(phoneNumber)).map(new Func1<DataSnapshot, P2PUser>() {
             @Override
             public P2PUser call(DataSnapshot snapshot) {
-                P2PUser user = null;
-                for(DataSnapshot snapshotChild : snapshot.getChildren())
-                {
-                    user = snapshotChild.getValue(P2PUser.class);
-                    user.setId(Long.parseLong(snapshotChild.getKey()));
-                }
-                return user;
+                return snapshot.getValue(P2PUser.class);
             }
         });
+    }
+
+    @Override
+    public Observable<P2PUser> syncUserContacts(List<LocalContact> localContacts, boolean isByQuery) {
+        if(isByQuery) {
+            return database.observeBatchContactsValueEventListener(localContacts, isByQuery).map(new Func1<DataSnapshot, P2PUser>() {
+                @Override
+                public P2PUser call(DataSnapshot snapshot) {
+                    return snapshot.getChildren().iterator().next().getValue(P2PUser.class);
+                }
+            });
+        }
+        else{
+            return database.observeBatchContactsValueEventListener(localContacts, isByQuery).map(new Func1<DataSnapshot, P2PUser>() {
+                @Override
+                public P2PUser call(DataSnapshot snapshot) {
+                    if(snapshot!=null && snapshot.exists())
+                        return snapshot.getValue(P2PUser.class);
+                    else
+                        return null;
+                }
+            });
+        }
     }
 
     @Override

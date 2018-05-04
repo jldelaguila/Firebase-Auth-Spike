@@ -143,3 +143,11 @@ Tpresentation/src/main/java/com/everis/authspike/presenter/ContactsPresenterImpl
 Spresentation/src/main/java/com/everis/authspike/view/activity/ContactsActivity.java,f/c/fcd82774de4e66e596718872ae099d482007c303
 ~
 Ndomain/src/main/java/com/everis/domain/interactor/GetUserByPhoneReference.java,1/a/1a8480dde489895f039f092116d20aaa4012b351
+i
+9domain/src/main/java/com/everis/domain/model/P2PUser.java,e/1/e11769ae3ac2e8836b63ddb9ebc8078ca407244e
+z
+Jdomain/src/main/java/com/everis/domain/interactor/GetUserByPhoneQuery.java,7/3/733a6b1d92009673d6c6ea9767b2efc713b70ad3
+w
+Gdomain/src/main/java/com/everis/domain/interactor/SyncUserContacts.java,8/a/8af89db47325266ca3e49c1837ffb9561a30775e
+y
+Ipresentation/src/main/java/com/everis/authspike/AuthSpikeApplication.java,d/a/da44b58327eae1ed754dd57003fd6b03c2f12d3f

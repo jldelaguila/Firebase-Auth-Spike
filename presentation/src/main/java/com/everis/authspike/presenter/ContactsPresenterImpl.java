@@ -9,7 +9,7 @@ import com.everis.data.network.local.SpikeContentProviderImpl;
 import com.everis.data.repository.ContentProviderDataRepository;
 import com.everis.data.repository.DatabaseDataRepository;
 import com.everis.domain.interactor.GetLocalContactsBatch;
-import com.everis.domain.interactor.SyncUser;
+import com.everis.domain.interactor.SyncUserContacts;
 import com.everis.domain.model.LocalContact;
 import com.everis.domain.model.P2PUser;
 
@@ -26,7 +26,7 @@ public class ContactsPresenterImpl implements ContactsPresenter {
     static final String TAG = ContactsPresenterImpl.class.getSimpleName();
 
     private GetLocalContactsBatch batchUseCase;
-    private SyncUser syncUserUseCase;
+    private SyncUserContacts syncUserContactsUseCase;
     private ContactsView view;
     private Context context;
 
@@ -34,7 +34,7 @@ public class ContactsPresenterImpl implements ContactsPresenter {
     public ContactsPresenterImpl(ContactsView view, Context context) {
         this.context = context;
         this.batchUseCase = new GetLocalContactsBatch(new UIThread(), new ContentProviderDataRepository(new SpikeContentProviderImpl(context)));
-        this.syncUserUseCase = new SyncUser(new UIThread(), new DatabaseDataRepository());
+        this.syncUserContactsUseCase = new SyncUserContacts(new UIThread(), new DatabaseDataRepository());
         this.view = view;
     }
 
@@ -56,6 +56,7 @@ public class ContactsPresenterImpl implements ContactsPresenter {
     @Override
     public void onDestroy() {
         batchUseCase.unsuscribe();
+        syncUserContactsUseCase.unsuscribe();
     }
 
     @Override
@@ -64,15 +65,15 @@ public class ContactsPresenterImpl implements ContactsPresenter {
     }
 
     @Override
-    public void getLocalContactsIndiv() {
-
+    public void syncUserContactsByQuery(List<LocalContact> contacts) {
+        syncUserContactsUseCase.bindParams(contacts, true);
+        syncUserContactsUseCase.execute(new SyncSubscriber());
     }
 
     @Override
-    public void syncUser(String number) {
-        syncUserUseCase.bindParams(number);
-        syncUserUseCase.execute(new SycnSubscriber());
-
+    public void syncUserContactsByRef(List<LocalContact> contacts) {
+        syncUserContactsUseCase.bindParams(contacts, false);
+        syncUserContactsUseCase.execute(new SyncSubscriber());
     }
 
     private class BatchSubscriber extends Subscriber<List<LocalContact>>{
@@ -102,7 +103,7 @@ public class ContactsPresenterImpl implements ContactsPresenter {
         }
     }
 
-    private class SycnSubscriber extends Subscriber<P2PUser>{
+    private class SyncSubscriber extends Subscriber<P2PUser>{
 
         @Override
         public void onStart() {
@@ -123,8 +124,13 @@ public class ContactsPresenterImpl implements ContactsPresenter {
 
         @Override
         public void onNext(P2PUser p2PUser) {
-            Log.d(TAG, "**************fin**************fin");
+            /*if(p2PUsers!=null){
+                Log.d(TAG, "Contactos retornados de P2P: " + p2PUsers.size());
+                //view.setSync(p2PUser.getPhoneNumber());
+            }*/
+
             if(p2PUser!=null){
+                Log.d(TAG, "Contactos retornados de P2P: " + p2PUser.toString());
                 view.setSync(p2PUser.getPhoneNumber());
             }
         }

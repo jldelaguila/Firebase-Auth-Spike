@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import com.everis.authspike.R;
-import com.everis.authspike.model.ContactModel;
 import com.everis.authspike.model.ContactModelDataMapper;
 import com.everis.authspike.presenter.ContactsPresenter;
 import com.everis.authspike.presenter.ContactsPresenterImpl;
@@ -69,10 +67,9 @@ public class ContactsActivity extends BaseActivity implements ContactsView, Perm
 
     @Override
     public void displayBatchContacts(List<LocalContact> contacts) {
-        for(LocalContact contact:contacts){
-            presenter.syncUser(contact.getNumber());
-        }
         adapter.setContacts(ContactModelDataMapper.transform(contacts));
+        //presenter.syncUserContactsByQuery(contacts);
+        presenter.syncUserContactsByRef(contacts);
     }
 
     @Override
