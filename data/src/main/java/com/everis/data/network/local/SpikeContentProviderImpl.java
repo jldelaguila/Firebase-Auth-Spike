@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.everis.data.model.LocalContactEntity;
 
@@ -28,51 +29,77 @@ public class SpikeContentProviderImpl implements SpikeContentProvider {
     @Override
     public Observable<List<LocalContactEntity>> getLocalContatsBatch() {
 
-        final String[] PROJECTION = new String[]{
-                ContactsContract.CommonDataKinds.Email.CONTACT_ID,
-                ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.CommonDataKinds.Email.DATA,
-                ContactsContract.CommonDataKinds.Photo.PHOTO_URI
-        };
-
         return Observable.create(new Observable.OnSubscribe<List<LocalContactEntity>>() {
             @Override
             public void call(Subscriber<? super List<LocalContactEntity>> subscriber) {
+
+                final String[] phoneProjection = new String[]{
+                        ContactsContract.CommonDataKinds.Phone.NUMBER,
+                        ContactsContract.CommonDataKinds.Phone._ID
+                };
+
                 List<LocalContactEntity> contactList = new ArrayList<>();
                 LocalContactEntity contact;
 
                 ContentResolver contentResolver = context.getContentResolver();
-                Cursor cursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        PROJECTION,
+                Cursor phoneCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        phoneProjection,
                         null,
                         null,
-                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+                        null);
 
-                if (cursor != null) {
-                    try {
-                        final int nameIndex = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
-                        final int numberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                        final int photoIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO_URI);
+                if (phoneCursor != null) {
 
-                        String name, number, photo;
-                        while (cursor.moveToNext()) {
-                            name = cursor.getString(nameIndex);
-                            number = cursor.getString(numberIndex);
-                            photo = cursor.getString(photoIndex);
+                    final int numberIndex = phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
-                            contact = new LocalContactEntity();
+                    String number;
+                    while (phoneCursor.moveToNext()) {
+                        long contactId = phoneCursor.getLong(phoneCursor
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
+                        number = phoneCursor.getString(numberIndex);
+                        contact = new LocalContactEntity();
+                        contact.setNumber(number);
 
-                            contact.setName(name);
-                            contact.setNumber(number);
-                            contact.setUriPhoto(photo);
-                            contactList.add(contact);
+                        final String[] contactProjection = new String[]{
+                                ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME,
+                                ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME
+                        };
+
+
+                        String where = ContactsContract.Data.RAW_CONTACT_ID + " = ? AND " + ContactsContract.Data.MIMETYPE + " = ?";
+                        String[] whereParameters = new String[]{String.valueOf(contactId), ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE};
+
+                        Cursor contactCursor = contentResolver.query(ContactsContract.Data.CONTENT_URI,
+                                contactProjection,
+                                where,
+                                whereParameters,
+                                null);
+
+                        if (contactCursor != null) {
+                            final int givenNameIndex = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+                            final int familyNameIndex = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+
+                            String givenName;
+                            String familyName;
+
+                            while (contactCursor.moveToNext()) {
+
+                                givenName = contactCursor.getString(givenNameIndex);
+                                familyName = contactCursor.getString(familyNameIndex);
+                                contact.setName(givenName + " " + familyName);
+
+                                contactList.add(contact);
+
+                            }
+
+                            contactCursor.close();
+
                         }
-                    } catch (Exception e) {
-                        e.getMessage();
-                        subscriber.onError(new Throwable(e.getLocalizedMessage()));
-                    } finally {
-                        cursor.close();
+
                     }
+
+                    phoneCursor.close();
+
                 }
 
                 subscriber.onNext(contactList);
