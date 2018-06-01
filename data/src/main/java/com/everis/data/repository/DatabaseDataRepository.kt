@@ -10,6 +10,7 @@ import com.everis.domain.repository.DatabaseRepository
 
 import com.google.firebase.database.FirebaseDatabase
 
+
 import rx.Observable
 
 class DatabaseDataRepository : DatabaseRepository {

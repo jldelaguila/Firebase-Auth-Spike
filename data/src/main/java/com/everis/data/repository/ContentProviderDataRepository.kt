@@ -10,7 +10,7 @@ import rx.Observable
 
 class ContentProviderDataRepository(private val database: SpikeContentProvider) : ContentProviderRepository {
 
-    override fun getLocalContactsBatch(): Observable<List<LocalContact>> {
+    override fun getLocalContactsBatch(): Observable<List<@JvmSuppressWildcards LocalContact>> {
         return database.getLocalContactsBatch().map { localContactEntities ->
             val localContacts = ArrayList<LocalContact>()
 
