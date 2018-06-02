@@ -12,8 +12,7 @@ import com.everis.authspike.view.views.RegisterView
 
 import kotlinx.android.synthetic.main.activity_register.*
 
-class RegisterActivity : BaseActivity(), RegisterView {
-
+class RegisterActivity : BaseActivity(), RegisterView, View.OnClickListener {
 
     private var presenter: RegisterPresenter? = null
 
@@ -22,18 +21,8 @@ class RegisterActivity : BaseActivity(), RegisterView {
         setContentView(R.layout.activity_register)
         presenter = RegisterPresenterImpl(this)
         preferenceManager = PreferenceManager(this)
-        login_button.setOnClickListener {
-            View.OnClickListener {
-                emailPasswordLogin()
-            }
-        }
-
-        register_button.setOnClickListener {
-            View.OnClickListener {
-                emailPasswordRegisterClicked()
-            }
-        }
-
+        login_button.setOnClickListener(this)
+        register_button.setOnClickListener(this)
     }
 
     override fun onDestroy() {
@@ -53,7 +42,7 @@ class RegisterActivity : BaseActivity(), RegisterView {
         navigator.navigateToHomeActivity(this)
     }
 
-    internal fun emailPasswordRegisterClicked() {
+    private fun emailPasswordRegisterClicked() {
         val email = tiet_email!!.text.toString()
         val password = tiet_password!!.text.toString()
         preferenceManager.setActiveSession(keep_session_checkbox!!.isChecked)
@@ -62,12 +51,19 @@ class RegisterActivity : BaseActivity(), RegisterView {
 
     }
 
-    internal fun emailPasswordLogin() {
+    private fun emailPasswordLogin() {
         val email = tiet_email!!.text.toString()
         val password = tiet_password!!.text.toString()
         preferenceManager.setActiveSession(keep_session_checkbox!!.isChecked)
         Log.d(TAG, "Sesion activa: " + keep_session_checkbox!!.isChecked)
         presenter!!.signInUser(email, password)
+    }
+
+    override fun onClick(v: View?) {
+        when (v) {
+            login_button -> emailPasswordLogin()
+            register_button -> emailPasswordRegisterClicked()
+        }
     }
 
     companion object {

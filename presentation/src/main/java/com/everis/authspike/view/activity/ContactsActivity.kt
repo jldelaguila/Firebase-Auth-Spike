@@ -72,6 +72,7 @@ class ContactsActivity : BaseActivity(), ContactsView, PermissionListener {
 
     override fun displayBatchContacts(contacts: List<LocalContact>) {
         adapter!!.contacts = ContactModelDataMapper.transform(contacts)
+        adapter!!.notifyDataSetChanged()
         presenter!!.syncUserContactsByRef(contacts)
     }
 }
