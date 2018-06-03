@@ -4,7 +4,7 @@ import android.text.TextUtils
 import android.util.Log
 
 import com.everis.authspike.UIThread
-import com.everis.authspike.view.views.RegisterView
+import com.everis.authspike.view.view.RegisterView
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.CreateUser
 import com.everis.domain.interactor.SignIn

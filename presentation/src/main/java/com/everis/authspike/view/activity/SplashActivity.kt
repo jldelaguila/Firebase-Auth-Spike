@@ -7,7 +7,7 @@ import android.view.View
 import com.everis.authspike.R
 import com.everis.authspike.presenter.SplashPresenter
 import com.everis.authspike.presenter.SplashPresenterImpl
-import com.everis.authspike.view.views.SplashView
+import com.everis.authspike.view.view.SplashView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_splash.*
 
@@ -19,9 +19,6 @@ class SplashActivity : BaseActivity(), SplashView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         presenter = SplashPresenterImpl(this)
-
-        displaySpikeNotification("Me creaste!!", "Muchas gracias amo :)")
-
 
         /**
          * First approach: SplashActiviy starts a monitoring service which
@@ -49,10 +46,10 @@ class SplashActivity : BaseActivity(), SplashView {
     }
 
     override fun navigateToRegisterScreen() {
-        navigator.navigateToRegisterActivity(this)
+        navigator.navigateToRegisterActivity()
     }
 
     override fun navigateToHomeScreen() {
-        navigator.navigateToHomeActivity(this)
+        navigator.navigateToHomeActivity()
     }
 }

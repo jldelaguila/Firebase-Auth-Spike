@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.everis.data" />
+<manifest package="com.everis.data" />

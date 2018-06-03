@@ -8,7 +8,7 @@ import com.everis.authspike.R
 import com.everis.authspike.presenter.RegisterPresenter
 import com.everis.authspike.presenter.RegisterPresenterImpl
 import com.everis.authspike.utils.PreferenceManager
-import com.everis.authspike.view.views.RegisterView
+import com.everis.authspike.view.view.RegisterView
 
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -39,7 +39,7 @@ class RegisterActivity : BaseActivity(), RegisterView, View.OnClickListener {
     }
 
     override fun showLoggedInScreen() {
-        navigator.navigateToHomeActivity(this)
+        navigator.navigateToHomeActivity()
     }
 
     private fun emailPasswordRegisterClicked() {

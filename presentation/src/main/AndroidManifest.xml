@@ -28,7 +28,6 @@
             android:name=".utils.LifecycleService"
             android:stopWithTask="false" />
 
-        <activity android:name=".view.activity.ContactsActivity"></activity>
     </application>
 
 </manifest>

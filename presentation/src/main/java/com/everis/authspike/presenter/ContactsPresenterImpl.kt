@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 
 import com.everis.authspike.UIThread
-import com.everis.authspike.view.views.ContactsView
+import com.everis.authspike.view.view.ContactsView
 import com.everis.data.network.local.SpikeContentProviderImpl
 import com.everis.data.repository.ContentProviderDataRepository
 import com.everis.data.repository.DatabaseDataRepository

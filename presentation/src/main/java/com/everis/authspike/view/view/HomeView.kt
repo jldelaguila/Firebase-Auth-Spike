@@ -1,4 +1,4 @@
-package com.everis.authspike.view.views
+package com.everis.authspike.view.view
 
 import com.everis.domain.model.IntroMessage
 

@@ -4,7 +4,7 @@ import android.text.TextUtils
 import android.util.Log
 
 import com.everis.authspike.UIThread
-import com.everis.authspike.view.views.SplashView
+import com.everis.authspike.view.view.SplashView
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.CheckLoggedIn
 import com.everis.domain.model.User

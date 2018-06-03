@@ -1,4 +1,4 @@
-package com.everis.authspike.view.adapters
+package com.everis.authspike.view.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

@@ -4,7 +4,7 @@ import android.util.Log
 
 import com.everis.authspike.UIThread
 import com.everis.authspike.model.UserModelDataMapper
-import com.everis.authspike.view.views.HomeView
+import com.everis.authspike.view.view.HomeView
 import com.everis.data.repository.DatabaseDataRepository
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.DeleteUser

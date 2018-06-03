@@ -15,21 +15,12 @@ import com.everis.authspike.utils.PreferenceManager
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    protected var navigator: Navigator = Navigator()
+    protected lateinit var navigator: Navigator
     protected lateinit var preferenceManager: PreferenceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navigator = Navigator(this)
         preferenceManager = PreferenceManager(this)
-    }
-
-    protected fun displaySpikeNotification(title: String, message: String) {
-        val mBuilder = NotificationCompat.Builder(this, "default")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        val notificationManager = NotificationManagerCompat.from(this)
-        notificationManager.notify(0, mBuilder.build())
     }
 }
