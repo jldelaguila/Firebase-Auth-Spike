@@ -37,7 +37,7 @@ public class HomeActivity extends BaseActivity implements HomeView{
 
         ButterKnife.bind(this);
         presenter = new HomePresenterImpl(this);
-        preferenceManager = new PreferenceManager(this);
+        setPreferenceManager(new PreferenceManager(this));
         presenter.loadUserState();
         presenter.loadIntroMessage();
         presenter.loadUserEnabled(userUid);
@@ -53,7 +53,7 @@ public class HomeActivity extends BaseActivity implements HomeView{
 
     @Override
     protected void onDestroy() {
-        if(!preferenceManager.getActiveSessionPreference()){
+        if(!getPreferenceManager().getActiveSessionPreference()){
             presenter.logOut();
         }
         presenter.onDestroy();
@@ -72,7 +72,7 @@ public class HomeActivity extends BaseActivity implements HomeView{
 
     @OnClick(R.id.open_contacts_button)
     void openContactsClicked(){
-        navigator.navigateToContactsActivity(this);
+        getNavigator().navigateToContactsActivity(this);
     }
 
     @Override
@@ -97,6 +97,6 @@ public class HomeActivity extends BaseActivity implements HomeView{
 
     @Override
     public void logOutView() {
-        navigator.navigateToRegisterActivity(this);
+        getNavigator().navigateToRegisterActivity(this);
     }
 }

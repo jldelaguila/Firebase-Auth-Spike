@@ -39,7 +39,7 @@ public class SplashActivity extends BaseActivity  implements SplashView{
         /**
          * Second approach: SplashActiviy checks if the user wanted to
          * maintaing his session active. If not, we perform the cleanup in this section*/
-        if(!preferenceManager.getActiveSessionPreference()){
+        if(!getPreferenceManager().getActiveSessionPreference()){
             FirebaseAuth.getInstance().signOut();
         }
 
@@ -60,11 +60,11 @@ public class SplashActivity extends BaseActivity  implements SplashView{
 
     @Override
     public void navigateToRegisterScreen() {
-        navigator.navigateToRegisterActivity(this);
+        getNavigator().navigateToRegisterActivity(this);
     }
 
     @Override
     public void navigateToHomeScreen() {
-        navigator.navigateToHomeActivity(this);
+        getNavigator().navigateToHomeActivity(this);
     }
 }
