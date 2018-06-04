@@ -1,21 +1,14 @@
 package com.everis.authspike.presenter
 
-import android.util.Log
-
+import com.crashlytics.android.Crashlytics
 import com.everis.authspike.UIThread
-import com.everis.authspike.model.UserModelDataMapper
 import com.everis.authspike.view.view.HomeView
 import com.everis.data.repository.DatabaseDataRepository
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.DeleteUser
 import com.everis.domain.interactor.GetEnabledUser
-import com.everis.domain.interactor.GetIntroMessage
-import com.everis.domain.interactor.GetUserByPhoneQuery
-import com.everis.domain.interactor.GetUserByPhoneReference
 import com.everis.domain.interactor.GetUserState
 import com.everis.domain.interactor.LogOut
-import com.everis.domain.model.IntroMessage
-import com.everis.domain.model.P2PUser
 import com.everis.domain.model.User
 
 import rx.Subscriber
@@ -25,13 +18,11 @@ import rx.Subscriber
  */
 
 class HomePresenterImpl(private val view: HomeView) : HomePresenter {
+
     private val userStateUseCase: GetUserState = GetUserState(UIThread(), UserDataRepository())
     private val logOutUseCase: LogOut = LogOut(UIThread(), UserDataRepository())
     private val deleteUserUseCase: DeleteUser = DeleteUser(UIThread(), UserDataRepository())
-    private val getIntroMessageUseCase: GetIntroMessage = GetIntroMessage(UIThread(), DatabaseDataRepository())
     private val getEnabledUserUseCase: GetEnabledUser = GetEnabledUser(UIThread(), DatabaseDataRepository())
-    private val userByRefUseCase: GetUserByPhoneReference = GetUserByPhoneReference(UIThread(), DatabaseDataRepository())
-    private val userByQueryUseCase: GetUserByPhoneQuery = GetUserByPhoneQuery(UIThread(), DatabaseDataRepository())
 
     override fun onPause() {
         //default implementation
@@ -49,10 +40,7 @@ class HomePresenterImpl(private val view: HomeView) : HomePresenter {
         userStateUseCase.unsuscribe()
         logOutUseCase.unsuscribe()
         deleteUserUseCase.unsuscribe()
-        getIntroMessageUseCase.unsuscribe()
         getEnabledUserUseCase.unsuscribe()
-        userByRefUseCase.unsuscribe()
-        userByQueryUseCase.unsuscribe()
     }
 
     override fun loadUserState() {
@@ -64,10 +52,6 @@ class HomePresenterImpl(private val view: HomeView) : HomePresenter {
         getEnabledUserUseCase.execute(GetUserEnabledSubscriber())
     }
 
-    override fun loadIntroMessage() {
-        getIntroMessageUseCase.execute(GetIntroMessageSubscriber())
-    }
-
     override fun logOut() {
         logOutUseCase.execute(LogOutSubscriber())
     }
@@ -77,15 +61,10 @@ class HomePresenterImpl(private val view: HomeView) : HomePresenter {
         deleteUserUseCase.execute(DeleteUserSubscriber())
     }
 
-    override fun loadUserByPhoneReference(phoneNumber: String) {
-        userByRefUseCase.bindParams(phoneNumber)
-        userByRefUseCase.execute(GetUserByPhoneRefSubscriber())
+    override fun crashApp() {
+       throw NullPointerException()
     }
 
-    override fun loadUserByPhoneQuery(phoneNumber: String) {
-        userByQueryUseCase.bindParams(phoneNumber)
-        userByQueryUseCase.execute(GetUserByPhoneQuerySubscriber())
-    }
 
     private inner class UserStateSubscriber : Subscriber<User>() {
 
@@ -94,22 +73,18 @@ class HomePresenterImpl(private val view: HomeView) : HomePresenter {
         }
 
         override fun onError(e: Throwable) {
-            Log.d(TAG, e.localizedMessage)
+            //default implementation
         }
 
         override fun onNext(user: User) {
-            val userModel = UserModelDataMapper.transform(user)
-            Log.d(TAG, "Se recibio un cambio en el usuario con uid: " + userModel.uid)
-            view.hideLoading()
-            view.changeUserStateText(if (userModel.isState) "Usuario habilitado" else "Usuario deshabilitado")
-
+            //default implementation
         }
     }
 
     private inner class LogOutSubscriber : Subscriber<Void>() {
 
         override fun onCompleted() {
-            view.logOutView()
+            view.logOut()
         }
 
         override fun onError(e: Throwable) {
@@ -124,31 +99,15 @@ class HomePresenterImpl(private val view: HomeView) : HomePresenter {
     private inner class DeleteUserSubscriber : Subscriber<Void>() {
 
         override fun onCompleted() {
-            view.hideLoading()
+            //default implementation
         }
 
         override fun onError(e: Throwable) {
-            view.hideLoading()
-            Log.d(TAG, "onError: " + e.localizedMessage)
+            //default implementation
         }
 
         override fun onNext(aVoid: Void) {
             //default implementation
-        }
-    }
-
-    private inner class GetIntroMessageSubscriber : Subscriber<IntroMessage>() {
-
-        override fun onCompleted() {
-            //there is never a complete
-        }
-
-        override fun onError(e: Throwable) {
-            Log.d(TAG, "IntroMessageError: " + e.localizedMessage)
-        }
-
-        override fun onNext(introMessage: IntroMessage) {
-            view.setIntroMessageText(introMessage)
         }
     }
 
@@ -159,58 +118,13 @@ class HomePresenterImpl(private val view: HomeView) : HomePresenter {
         }
 
         override fun onError(e: Throwable) {
-            Log.d(TAG, e.localizedMessage)
+            //default implementation
         }
 
         override fun onNext(enabled: Boolean?) {
             if (!enabled!!)
                 logOut()
         }
-    }
-
-    private inner class GetUserByPhoneRefSubscriber : Subscriber<P2PUser>() {
-
-        override fun onStart() {
-            super.onStart()
-            Log.d(TAG, "*******************Inicio de busqueda por referencia*******************")
-        }
-
-        override fun onCompleted() {}
-
-        override fun onError(e: Throwable) {
-            Log.d(TAG, "*******************Ocurrio un error en la busqueda por referencia*******************")
-            Log.d(TAG, e.localizedMessage)
-        }
-
-        override fun onNext(user: P2PUser) {
-            Log.d(TAG, "Usuario encontrado por referencia: " + user.toString())
-
-        }
-    }
-
-    private inner class GetUserByPhoneQuerySubscriber : Subscriber<P2PUser>() {
-
-        override fun onStart() {
-            super.onStart()
-            Log.d(TAG, "*******************Inicio de busqueda por Query*******************")
-        }
-
-        override fun onCompleted() {}
-
-        override fun onError(e: Throwable) {
-            Log.d(TAG, "*******************Ocurrio un error en la busqueda por Query*******************")
-            Log.d(TAG, e.localizedMessage)
-        }
-
-        override fun onNext(user: P2PUser) {
-            Log.d(TAG, "Usuario encontrado por query: " + user.toString())
-
-        }
-    }
-
-    companion object {
-
-        private val TAG = HomePresenterImpl::class.java.simpleName
     }
 
 }

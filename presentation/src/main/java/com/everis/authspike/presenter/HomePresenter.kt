@@ -8,10 +8,7 @@ interface HomePresenter : BasePresenter {
 
     fun loadUserState()
     fun loadUserEnabled(userUid: String)
-    fun loadIntroMessage()
     fun logOut()
     fun deleteUser()
-    fun loadUserByPhoneReference(phoneNumber: String)
-    fun loadUserByPhoneQuery(phoneNumber: String)
-
+    fun crashApp()
 }

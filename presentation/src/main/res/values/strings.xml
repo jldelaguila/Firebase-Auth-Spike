@@ -6,4 +6,5 @@
     <string name="register_login_button">Log In</string>
     <string name="sesion_persistance_message">Mantener la sesión activa</string>
     <string name="home_log_out_button">Log Out</string>
+    <string name="no_touch">No tocar</string>
 </resources>
