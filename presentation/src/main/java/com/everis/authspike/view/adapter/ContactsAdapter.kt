@@ -13,29 +13,89 @@ import kotlinx.android.synthetic.main.row_local_contacts.view.*
 import java.util.ArrayList
 
 
-/**
- * Created by everis on 3/05/18.
- */
-
 class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHolder>() {
 
-    var contacts: List<ContactModel>? = null
+    var contacts: ArrayList<ContactModel>? = null
+    var filteredContacts: ArrayList<ContactModel>? = null
+    var filteredList: Boolean = false
 
     var listener: OnClickListener? = null
 
     init {
         contacts = ArrayList()
+        filteredContacts = ArrayList()
     }
 
 
     fun updateUser(p2PUser: P2PUser) {
-        for (contactModel in contacts!!) {
-            if (contactModel.number == p2PUser.phoneNumber) {
-                contactModel.isCloudUser = p2PUser.isEnable
-                contactModel.url = p2PUser.picture_url!!
-            }
+        if (filteredList) {
+            updateFilteredList(p2PUser)
+        } else {
+            updateNotFilteredList(p2PUser)
         }
         notifyDataSetChanged()
+    }
+
+    private fun updateFilteredList(p2PUser: P2PUser) {
+        val localIndex = getLocalIndex(p2PUser)
+        if (localIndex != -1) {
+
+            val index = getFilteredIndex(p2PUser)
+            val contact = contacts!![localIndex]
+            contact.isCloudUser = p2PUser.enable
+            contact.url = p2PUser.picture_url
+
+            if (contact.isCloudUser) {
+
+                if (index == -1) {
+                    filteredContacts!!.add(contact)
+                } else {
+                    filteredContacts!![index] = contact
+                }
+
+            }
+            else if (index != -1){
+                filteredContacts!!.removeAt(index)
+            }
+
+
+        }
+    }
+
+    private fun getLocalIndex(p2PUser: P2PUser): Int {
+        var index = -1
+
+        for (i in 0 until contacts!!.size) {
+            val tempContact = contacts!![i]
+            if (tempContact.number == p2PUser.phoneNumber) {
+                index = i
+                break
+            }
+        }
+
+        return index
+    }
+
+    private fun getFilteredIndex(p2PUser: P2PUser): Int {
+        var index = -1
+
+        for (i in 0 until filteredContacts!!.size) {
+            val tempContact = filteredContacts!![i]
+            if (tempContact.number == p2PUser.phoneNumber) {
+                index = i
+                break
+            }
+        }
+
+        return index
+    }
+
+    private fun updateNotFilteredList(p2PUser: P2PUser) {
+        for (contactModel in contacts!!) {
+            if (contactModel.number == p2PUser.phoneNumber) {
+                contactModel.isCloudUser = p2PUser.enable
+            }
+        }
     }
 
 
@@ -45,12 +105,20 @@ class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHol
     }
 
     override fun onBindViewHolder(holder: LocalContactViewHolder, position: Int) {
-        val currentContact = contacts!![position]
+        val currentContact: ContactModel
+        if (filteredList) {
+            currentContact = filteredContacts!![position]
+        } else {
+            currentContact = contacts!![position]
+        }
         holder.bindView(currentContact)
     }
 
     override fun getItemCount(): Int {
-        return contacts!!.size
+        if (filteredList)
+            return filteredContacts!!.size
+        else
+            return contacts!!.size
     }
 
     interface OnClickListener {

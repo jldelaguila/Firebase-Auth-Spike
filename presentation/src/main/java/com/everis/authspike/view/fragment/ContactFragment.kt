@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.everis.authspike.R
+import com.everis.authspike.model.ContactModel
 import com.everis.authspike.model.ContactModelDataMapper
 import com.everis.authspike.presenter.ContactsPresenter
 import com.everis.authspike.presenter.ContactsPresenterImpl
@@ -27,6 +28,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_contact.*
+import java.util.ArrayList
 
 
 class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickListener {
@@ -49,6 +51,7 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickLis
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter = ContactsPresenterImpl(this, context!!)
+        presenter.getContactsListConfig()
         adapter = ContactsAdapter()
         adapter.listener = this
         activity = getActivity() as HomeActivity
@@ -56,11 +59,6 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickLis
         contacts_rv.adapter = adapter
         contacts_rv.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL))
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS).withListener(this).onSameThread().check()
     }
 
     override fun showLoading() {
@@ -71,6 +69,10 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickLis
         contacts_progressbar!!.visibility = View.GONE
     }
 
+    override fun setListConfig(listConfig: Boolean) {
+        adapter.filteredList = listConfig
+        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS).withListener(this).onSameThread().check()
+    }
 
     override fun setSync(user: P2PUser) {
         adapter.updateUser(user)
@@ -87,7 +89,7 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickLis
     override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) {}
 
     override fun displayBatchContacts(contacts: List<LocalContact>) {
-        adapter.contacts = ContactModelDataMapper.transform(contacts)
+        adapter.contacts = ContactModelDataMapper.transform(contacts) as ArrayList<ContactModel>
         adapter.notifyDataSetChanged()
         presenter.syncUserContactsByRef(contacts)
     }

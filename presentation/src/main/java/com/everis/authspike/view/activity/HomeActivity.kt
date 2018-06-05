@@ -8,15 +8,29 @@ import android.view.MenuItem
 import com.everis.authspike.presenter.HomePresenter
 import com.everis.authspike.presenter.HomePresenterImpl
 import com.everis.authspike.view.view.HomeView
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.GoogleApiClient
 
 
 class HomeActivity : BaseActivity(), HomeView {
 
     private lateinit var presenter: HomePresenter
+    var mGoogleSignInClient : GoogleApiClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .build()
+
+        mGoogleSignInClient = GoogleApiClient.Builder(this)
+                .enableAutoManage(this,null)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                .build()
+
         presenter = HomePresenterImpl(this)
         navigator.navigateToContactsFragment()
     }
@@ -50,6 +64,7 @@ class HomeActivity : BaseActivity(), HomeView {
     }
 
     override fun logOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleSignInClient)
         navigator.navigateToRegisterActivity()
     }
 

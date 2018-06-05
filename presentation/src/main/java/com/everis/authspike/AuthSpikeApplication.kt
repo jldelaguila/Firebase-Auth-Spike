@@ -5,13 +5,12 @@ import android.app.Application
 import com.google.firebase.database.FirebaseDatabase
 import io.fabric.sdk.android.Fabric
 import com.crashlytics.android.Crashlytics
+import com.everis.authspike.utils.RxBus
 
-
-/**
- * Created by everis on 3/05/18.
- */
 
 class AuthSpikeApplication : Application() {
+
+    var rxBus: RxBus = RxBus()
 
     override fun onCreate() {
         super.onCreate()

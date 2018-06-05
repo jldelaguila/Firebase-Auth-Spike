@@ -3,7 +3,6 @@ package com.everis.authspike.view.fragment
 
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
-import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,12 +11,14 @@ import android.view.ViewGroup
 
 import com.everis.authspike.R
 import com.everis.authspike.presenter.RegisterPresenter
+import com.everis.authspike.presenter.RegisterPresenterImpl
+import com.everis.authspike.utils.Event
 import com.everis.authspike.view.activity.WelcomeActivity
 import com.everis.authspike.view.view.LoginView
 import kotlinx.android.synthetic.main.fragment_register.*
+import rx.functions.Action1
 
-
-class RegisterFragment : Fragment() , LoginView {
+class RegisterFragment : BaseFragment() , LoginView{
 
     lateinit var activity : WelcomeActivity
     lateinit var presenter : RegisterPresenter
@@ -38,7 +39,35 @@ class RegisterFragment : Fragment() , LoginView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = getActivity() as WelcomeActivity
+        presenter = RegisterPresenterImpl(this)
         initUI()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        subscribeBus()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unsubscribeBus()
+    }
+
+    override fun getBusAction(): Action1<Any>? {
+        return Action1{
+            if(it is Event.GoogleSignInEvent){
+                val event: Event.GoogleSignInEvent = it
+                val result = event.signInResult
+
+                if(result!!.isSuccess){
+                    val account = result.signInAccount
+                    presenter.signInGoogle(account!!)
+                }
+                else{
+                    activity.hideLoading()
+                }
+            }
+        }
     }
 
     override fun showLoggedInScreen() {
@@ -53,9 +82,18 @@ class RegisterFragment : Fragment() , LoginView {
         activity.hideLoading()
     }
 
+    override fun safeActiveSession(active: Boolean) {
+        preferenceManager.setActiveSession(active)
+    }
+
     private fun initUI() {
         register_button.setOnClickListener {
             emailPasswordRegisterClicked()
+        }
+
+        google_button.setOnClickListener{
+            showLoading()
+            activity.googleSignIn()
         }
 
         tiet_password.onChange {
