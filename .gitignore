@@ -79,6 +79,7 @@ obj/
 .idea/gradle.xml
 .idea/sonarlint/*
 .idea/misc.xml
+.idea/*
 
 # OS-specific files
 .DS_Store

@@ -50,11 +50,11 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickLis
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity = getActivity() as HomeActivity
         presenter = ContactsPresenterImpl(this, context!!)
         presenter.getContactsListConfig()
-        adapter = ContactsAdapter()
+        adapter = ContactsAdapter(activity)
         adapter.listener = this
-        activity = getActivity() as HomeActivity
         contacts_rv.layoutManager = LinearLayoutManager(context!!)
         contacts_rv.adapter = adapter
         contacts_rv.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL))

@@ -7,13 +7,15 @@ import android.view.ViewGroup
 
 import com.everis.authspike.R
 import com.everis.authspike.model.ContactModel
+import com.everis.authspike.utils.GlideApp
+import com.everis.authspike.view.activity.HomeActivity
 import com.everis.domain.model.P2PUser
 import kotlinx.android.synthetic.main.row_local_contacts.view.*
 
 import java.util.ArrayList
 
 
-class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHolder>() {
+class ContactsAdapter(val activity: HomeActivity) : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHolder>() {
 
     var contacts: ArrayList<ContactModel>? = null
     var filteredContacts: ArrayList<ContactModel>? = null
@@ -131,6 +133,7 @@ class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHol
         private val tvName = itemView.tvName!!
         private val tvNumber = itemView.tvNumber!!
         private val statusIv = itemView.status_image!!
+        private val ivContact = itemView.iv_profile!!
 
         fun bindView(contact: ContactModel) {
             tvName.text = contact.name
@@ -141,6 +144,12 @@ class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHol
                     listener!!.onClick(contact.number, contact.url)
                 }
             }
+            GlideApp.with(activity)
+                    .load(contact.url)
+                    .circleCrop()
+                    .placeholder(R.drawable.ic_account_circle)
+                    .dontAnimate()
+                    .into(ivContact)
         }
     }
 
