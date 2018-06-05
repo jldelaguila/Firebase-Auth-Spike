@@ -35,7 +35,7 @@ abstract class BaseActivity : AppCompatActivity() {
             if (subscription == null) {
                 subscription = CompositeSubscription()
             }
-            subscription?.add(rxBus?.toObservable()?.subscribe(action))
+            subscription?.add(rxBus.toObservable().subscribe(action))
         } else {
             throw NullPointerException("Action must not be null. Override getBusAction method to provide an action to the bus.")
         }

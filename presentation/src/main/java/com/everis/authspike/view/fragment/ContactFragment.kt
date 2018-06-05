@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.everis.authspike.R
+import com.everis.authspike.model.ContactModel
 import com.everis.authspike.model.ContactModelDataMapper
 import com.everis.authspike.presenter.ContactsPresenter
 import com.everis.authspike.presenter.ContactsPresenterImpl
@@ -25,6 +26,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.fragment_contact.*
+import java.util.ArrayList
 
 
 class ContactFragment : Fragment(), ContactsView, PermissionListener {
@@ -82,7 +84,7 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener {
     override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) {}
 
     override fun displayBatchContacts(contacts: List<LocalContact>) {
-        adapter.contacts = ContactModelDataMapper.transform(contacts)
+        adapter.contacts = ContactModelDataMapper.transform(contacts) as ArrayList<ContactModel>
         adapter.notifyDataSetChanged()
         presenter.syncUserContactsByRef(contacts)
     }
