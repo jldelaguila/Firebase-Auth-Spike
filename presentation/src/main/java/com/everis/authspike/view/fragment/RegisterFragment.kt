@@ -3,16 +3,14 @@ package com.everis.authspike.view.fragment
 
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
-import android.support.v4.app.Fragment
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 import com.everis.authspike.R
-import com.everis.authspike.navigator.Navigator
+import com.everis.authspike.presenter.RegisterPresenter
 import com.everis.authspike.presenter.RegisterPresenterImpl
 import com.everis.authspike.utils.Event
 import com.everis.authspike.view.activity.WelcomeActivity
@@ -24,15 +22,12 @@ import rx.functions.Action1
 class RegisterFragment : BaseFragment() , LoginView{
 
     lateinit var activity : WelcomeActivity
-    var presenter = RegisterPresenterImpl(this)
-    var navigator = Navigator()
+    lateinit var presenter : RegisterPresenter
 
     companion object {
 
-        fun newInstance(activity: WelcomeActivity): RegisterFragment {
-            val fragment = RegisterFragment()
-            fragment.activity = activity
-            return fragment
+        fun newInstance(): RegisterFragment {
+            return RegisterFragment()
         }
 
     }
@@ -44,6 +39,8 @@ class RegisterFragment : BaseFragment() , LoginView{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity = getActivity() as WelcomeActivity
+        presenter = RegisterPresenterImpl(this)
         initUI()
     }
 
@@ -72,7 +69,7 @@ class RegisterFragment : BaseFragment() , LoginView{
     }
 
     override fun showLoggedInScreen() {
-        navigator.navigateToHomeActivity(activity)
+        activity.navigator.navigateToHomeActivity()
     }
 
     override fun showLoading() {
@@ -94,30 +91,30 @@ class RegisterFragment : BaseFragment() , LoginView{
         }
 
         tiet_password.onChange {
-            tiet_password.setError(null)
+            tiet_password.error = null
         }
 
         tiet_repassword.onChange {
-            tiet_repassword.setError(null)
+            tiet_repassword.error = null
         }
 
         tiet_email.onChange {
-            tiet_email.setError(null)
+            tiet_email.error = null
         }
 
     }
 
-    internal fun emailPasswordRegisterClicked() {
+    private fun emailPasswordRegisterClicked() {
         val email = tiet_email!!.text.toString()
         val password = tiet_password!!.text.toString()
         val repassword = tiet_repassword.text.toString()
 
         if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            tiet_email.setError("Invalid email")
+            tiet_email.error = "Invalid email"
         }
         else if(!password.equals(repassword) || password.length <= 6){
-            tiet_repassword.setError("Invalid password")
-            tiet_password.setError("Invalid password")
+            tiet_repassword.error = "Invalid password"
+            tiet_password.error = "Invalid password"
         }
         else{
             presenter.createUser(email, password)
@@ -126,7 +123,7 @@ class RegisterFragment : BaseFragment() , LoginView{
     }
 
 
-    fun TextInputEditText.onChange(cb: (String) -> Unit) {
+    private fun TextInputEditText.onChange(cb: (String) -> Unit) {
         this.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(s: Editable?) { cb(s.toString()) }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

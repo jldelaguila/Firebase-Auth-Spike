@@ -4,6 +4,6 @@ import rx.Scheduler
 
 interface PostExecutorThread {
 
-    val scheduler: Scheduler
+    fun getScheduler() : Scheduler
 
 }

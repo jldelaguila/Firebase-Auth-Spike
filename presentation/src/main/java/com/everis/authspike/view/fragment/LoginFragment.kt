@@ -49,12 +49,30 @@ class LoginFragment : Fragment() , LoginView{
         super.onActivityCreated(savedInstanceState)
         preferenceManager = PreferenceManager(activity)
         presenter = LoginPresenterImpl(this)
-        navigator = Navigator()
+        navigator = Navigator(activity)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         this.presenter!!.onDestroy()
+    }
+
+
+    private fun initUI() {
+        login_button.setOnClickListener {
+            emailPasswordLogin()
+        }
+
+        tv_not_registered.setOnClickListener {
+            navigator!!.navigateToRegisterFragment()
+        }
+    }
+
+    private fun emailPasswordLogin() {
+        val email = tiet_email!!.text.toString()
+        val password = tiet_password!!.text.toString()
+        preferenceManager!!.setActiveSession(keep_session_checkbox!!.isChecked)
+        presenter!!.signInUser(email, password)
     }
 
     override fun showLoading() {
@@ -65,25 +83,9 @@ class LoginFragment : Fragment() , LoginView{
         activity.hideLoading()
     }
 
-    private fun initUI() {
-        login_button.setOnClickListener {
-            emailPasswordLogin()
-        }
-
-        tv_not_registered.setOnClickListener {
-            navigator!!.navigateToRegisterFragment(activity)
-        }
-    }
-
-    internal fun emailPasswordLogin() {
-        val email = tiet_email!!.text.toString()
-        val password = tiet_password!!.text.toString()
-        preferenceManager!!.setActiveSession(keep_session_checkbox!!.isChecked)
-        presenter!!.signInUser(email, password)
-    }
 
     override fun showLoggedInScreen() {
-        navigator!!.navigateToHomeActivity(activity)
+        navigator!!.navigateToHomeActivity()
     }
 
 }

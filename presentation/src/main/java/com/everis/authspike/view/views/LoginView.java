@@ -1,7 +1,9 @@
 package com.everis.authspike.view.views;
 
 
-public interface LoginView extends BaseView{
+import com.everis.authspike.view.view.BaseView;
+
+public interface LoginView extends BaseView {
 
     void showLoggedInScreen();
 

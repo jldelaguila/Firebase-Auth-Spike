@@ -6,7 +6,7 @@ import android.view.View
 
 import com.everis.authspike.R
 import com.everis.authspike.utils.Event
-import com.everis.authspike.view.views.BaseView
+import com.everis.authspike.view.view.BaseView
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_register.*
 
 class WelcomeActivity : BaseActivity(), BaseView, GoogleApiClient.OnConnectionFailedListener {
 
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).build()
+    lateinit var gso : GoogleSignInOptions
     var mGoogleSignInClient : GoogleApiClient? = null
     val GOOGLE_SIGN_IN_REQUEST_CODE = 200
 
@@ -24,13 +24,17 @@ class WelcomeActivity : BaseActivity(), BaseView, GoogleApiClient.OnConnectionFa
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         navigator.navigateToLoginFragment(this)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .build()
+        
         mGoogleSignInClient = GoogleApiClient.Builder(this)
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
                 .build()
     }
 
-    public fun googleSignIn(){
+    fun googleSignIn(){
         val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleSignInClient)
         startActivityForResult(intent, GOOGLE_SIGN_IN_REQUEST_CODE)
     }
@@ -50,7 +54,7 @@ class WelcomeActivity : BaseActivity(), BaseView, GoogleApiClient.OnConnectionFa
 
             val signInEvent = Event.GoogleSignInEvent()
             signInEvent.signInResult = result
-            rxBus?.send(signInEvent)
+            rxBus.send(signInEvent)
         }
     }
 

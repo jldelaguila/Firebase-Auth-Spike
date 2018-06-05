@@ -45,7 +45,7 @@ class DatabaseDataRepository : DatabaseRepository {
 
     override fun observeRemoveValue(collection: String, node: String): Observable<Void> {
         return Observable.create { subscriber ->
-            FirebaseDatabase.getInstance().reference.child(collection).child(node).removeValue { databaseError, databaseReference ->
+            FirebaseDatabase.getInstance().reference.child(collection).child(node).removeValue { databaseError, _ ->
                 if (databaseError != null) {
                     subscriber.onError(databaseError.toException())
                 } else {

@@ -1,6 +1,8 @@
 package com.everis.authspike.view.fragment
 
+import android.os.Bundle
 import android.support.v4.app.Fragment
+import com.everis.authspike.AuthSpikeApplication
 import com.everis.authspike.utils.RxBus
 import rx.functions.Action1
 import rx.subscriptions.CompositeSubscription
@@ -8,8 +10,13 @@ import rx.subscriptions.CompositeSubscription
 
 abstract class BaseFragment(): Fragment() {
 
-    var rxBus: RxBus? = RxBus()
+    lateinit var rxBus: RxBus
     var subscription: CompositeSubscription? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        rxBus = (activity?.application as AuthSpikeApplication).rxBus
+    }
 
     open fun getBusAction(): Action1<Any>? {
         return null

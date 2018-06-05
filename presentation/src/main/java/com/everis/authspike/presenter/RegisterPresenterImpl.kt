@@ -2,6 +2,7 @@ package com.everis.authspike.presenter
 
 import android.text.TextUtils
 import com.everis.authspike.UIThread
+import com.everis.authspike.view.view.RegisterView
 import com.everis.authspike.view.views.LoginView
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.CreateUser
@@ -37,7 +38,9 @@ class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
     }
 
     override fun signInGoogle(account: GoogleSignInAccount) {
+        val accountToken = account.idToken
         val credentials = GoogleAuthProvider.getCredential(account.idToken,null)
+
         FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {
             if(it.isSuccessful){
                 view.hideLoading()

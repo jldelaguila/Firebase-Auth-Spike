@@ -19,7 +19,7 @@ abstract class UseCase<T>(private val postExecutorThread: PostExecutorThread) {
     fun execute(subscriber: Subscriber<T>) {
         this.subscription = this.buildUseCaseObservable()
                 .subscribeOn(Schedulers.io())
-                .observeOn(postExecutorThread.scheduler)
+                .observeOn(postExecutorThread.getScheduler())
                 .subscribe(subscriber)
     }
 
