@@ -9,16 +9,15 @@ import com.everis.authspike.navigator.Navigator
 import com.everis.authspike.presenter.LoginPresenter
 import com.everis.authspike.presenter.LoginPresenterImpl
 import com.everis.authspike.utils.Event
-import com.everis.authspike.utils.PreferenceManager
-
-import kotlinx.android.synthetic.main.fragment_login.*
 
 
 import com.everis.authspike.view.activity.WelcomeActivity
-import com.everis.authspike.view.views.LoginView
+
+import com.everis.authspike.view.view.LoginView
+import kotlinx.android.synthetic.main.fragment_login.*
 import rx.functions.Action1
 
-class LoginFragment : BaseFragment() , LoginView{
+class LoginFragment : BaseFragment() , LoginView {
 
     lateinit var activity: WelcomeActivity
 

@@ -1,7 +1,5 @@
-package com.everis.authspike.view.views
+package com.everis.authspike.view.view
 
-
-import com.everis.authspike.view.view.BaseView
 
 interface LoginView : BaseView {
 

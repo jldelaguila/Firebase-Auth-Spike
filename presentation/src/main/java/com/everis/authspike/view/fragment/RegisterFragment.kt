@@ -14,10 +14,9 @@ import com.everis.authspike.presenter.RegisterPresenter
 import com.everis.authspike.presenter.RegisterPresenterImpl
 import com.everis.authspike.utils.Event
 import com.everis.authspike.view.activity.WelcomeActivity
-import com.everis.authspike.view.views.LoginView
+import com.everis.authspike.view.view.LoginView
 import kotlinx.android.synthetic.main.fragment_register.*
 import rx.functions.Action1
-
 
 class RegisterFragment : BaseFragment() , LoginView{
 

@@ -15,7 +15,9 @@ import com.everis.authspike.model.ContactModel
 import com.everis.authspike.model.ContactModelDataMapper
 import com.everis.authspike.presenter.ContactsPresenter
 import com.everis.authspike.presenter.ContactsPresenterImpl
+import com.everis.authspike.view.activity.HomeActivity
 import com.everis.authspike.view.adapter.ContactsAdapter
+import com.everis.authspike.view.adapter.ContactsAdapter.OnClickListener
 import com.everis.authspike.view.view.ContactsView
 import com.everis.domain.model.LocalContact
 import com.everis.domain.model.P2PUser
@@ -29,15 +31,17 @@ import kotlinx.android.synthetic.main.fragment_contact.*
 import java.util.ArrayList
 
 
-class ContactFragment : Fragment(), ContactsView, PermissionListener {
+class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickListener {
 
     companion object {
-        fun newInstance() : ContactFragment = ContactFragment()
+        fun newInstance(): ContactFragment = ContactFragment()
     }
 
     private lateinit var presenter: ContactsPresenter
 
     private lateinit var adapter: ContactsAdapter
+
+    private lateinit var activity: HomeActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -49,10 +53,11 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener {
         presenter = ContactsPresenterImpl(this, context!!)
         presenter.getContactsListConfig()
         adapter = ContactsAdapter()
-
+        adapter.listener = this
+        activity = getActivity() as HomeActivity
         contacts_rv.layoutManager = LinearLayoutManager(context!!)
-        contacts_rv!!.adapter = adapter
-        contacts_rv!!.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL))
+        contacts_rv.adapter = adapter
+        contacts_rv.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL))
 
     }
 
@@ -88,4 +93,9 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener {
         adapter.notifyDataSetChanged()
         presenter.syncUserContactsByRef(contacts)
     }
+
+    override fun onClick(phone: String, url: String) {
+        activity.navigator.navigateToProfileActivity(phone, url)
+    }
+
 }

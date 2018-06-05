@@ -2,8 +2,7 @@ package com.everis.authspike.presenter
 
 import android.text.TextUtils
 import com.everis.authspike.UIThread
-import com.everis.authspike.view.view.RegisterView
-import com.everis.authspike.view.views.LoginView
+import com.everis.authspike.view.view.LoginView
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.CreateUser
 import com.everis.domain.model.User
@@ -12,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import rx.Subscriber
 
-class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
+class RegisterPresenterImpl(val view : LoginView) : RegisterPresenter{
 
     override fun onPause() {
         //default implementation

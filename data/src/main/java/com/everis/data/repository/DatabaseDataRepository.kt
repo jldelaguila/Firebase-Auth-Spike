@@ -7,11 +7,13 @@ import com.everis.domain.model.IntroMessage
 import com.everis.domain.model.LocalContact
 import com.everis.domain.model.P2PUser
 import com.everis.domain.repository.DatabaseRepository
+import com.google.firebase.database.DatabaseReference
 
 import com.google.firebase.database.FirebaseDatabase
 
 
 import rx.Observable
+import rx.Subscriber
 
 class DatabaseDataRepository : DatabaseRepository {
 
@@ -55,6 +57,7 @@ class DatabaseDataRepository : DatabaseRepository {
         }
     }
 
+
     override fun syncUserContacts(localContacts: List<LocalContact>, isByQuery: Boolean): Observable<P2PUser> {
         return if (isByQuery) {
             database.observeBatchContactsValueEventListener(localContacts, isByQuery).map { snapshot -> snapshot.children.iterator().next().getValue(P2PUser::class.java) }
@@ -70,4 +73,23 @@ class DatabaseDataRepository : DatabaseRepository {
             }
         }
     }
+
+    override fun updateUser(url: String, phone: String): Observable<Unit> {
+        return Observable.create { subscriber ->
+            subscriber.onStart()
+            FirebaseDatabase.getInstance().reference
+                    .child("p2p_users")
+                    .child(phone).child("picture_url")
+                    .setValue(url, { databaseError, _ ->
+                        if (databaseError == null) {
+                            subscriber.onNext(null)
+                            subscriber.onCompleted()
+                        }else{
+                            subscriber.onError(databaseError.toException())
+                        }
+                    })
+
+        }
+    }
+
 }
