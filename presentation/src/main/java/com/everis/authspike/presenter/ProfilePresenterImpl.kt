@@ -53,7 +53,7 @@ class ProfilePresenterImpl(private val view: ProfileView) : ProfilePresenter {
             view.hideLoading()
         }
 
-        override fun onNext(u: Unit) {
+        override fun onNext(u: Unit?) {
             view.updateSuccessful()
         }
     }
