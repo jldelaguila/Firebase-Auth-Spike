@@ -10,6 +10,7 @@ import rx.android.schedulers.AndroidSchedulers
  */
 
 class UIThread : PostExecutorThread {
+
     override fun getScheduler(): Scheduler {
         return AndroidSchedulers.mainThread()
     }

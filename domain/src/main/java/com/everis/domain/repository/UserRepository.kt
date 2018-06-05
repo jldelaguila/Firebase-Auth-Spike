@@ -4,10 +4,6 @@ import com.everis.domain.model.User
 
 import rx.Observable
 
-/**
- * Created by everis on 25/04/18.
- */
-
 interface UserRepository {
 
     fun createUser(email: String, password: String): Observable<User>

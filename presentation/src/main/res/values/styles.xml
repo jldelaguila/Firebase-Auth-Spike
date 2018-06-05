@@ -6,6 +6,20 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="checkboxStyle">@style/CheckboxSyle</item>
+        <item name="editTextStyle">@style/SpikeTextFieldStyle</item>
+        <item name="colorControlActivated">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
+    <style name="SpikeTextFieldStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColorHint">@color/colorWhite</item>
+    </style>
+
+    <style name="CheckboxSyle" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
     </style>
 
 </resources>

@@ -2,15 +2,24 @@ package com.everis.authspike.presenter
 
 import android.text.TextUtils
 import android.util.Log
+
 import com.everis.authspike.UIThread
-import com.everis.authspike.view.view.RegisterView
 import com.everis.authspike.view.views.LoginView
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.CreateUser
+import com.everis.domain.interactor.SignIn
 import com.everis.domain.model.User
+
 import rx.Subscriber
 
-class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
+/**
+ * Created by everis on 25/04/18.
+ */
+
+class LoginPresenterImpl(private val view: LoginView) : LoginPresenter {
+
+    private val signInUseCase: SignIn = SignIn(UIThread(), UserDataRepository())
+
     override fun onPause() {
         //default implementation
     }
@@ -24,32 +33,37 @@ class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
     }
 
     override fun onDestroy() {
-        createUserUseCase.unsuscribe()
+        signInUseCase.unsuscribe()
     }
 
-    private val createUserUseCase: CreateUser = CreateUser(UIThread(), UserDataRepository())
 
-    override fun createUser(email: String, password: String) {
+    override fun signInUser(email: String, password: String) {
         this.view.showLoading()
-        createUserUseCase.bindParams(email, password)
-        createUserUseCase.execute(CreateUserSubscriber())
+        signInUseCase.bindParams(email, password)
+        signInUseCase.execute(SignInUserSubscriber())
     }
 
-    private inner class CreateUserSubscriber : Subscriber<User>() {
+
+
+
+    private inner class SignInUserSubscriber : Subscriber<User>() {
 
         override fun onCompleted() {
             view.hideLoading()
         }
 
         override fun onError(e: Throwable) {
+            Log.d(TAG, e.localizedMessage)
             view.hideLoading()
         }
 
         override fun onNext(user: User) {
-            if (user.uid != null && !TextUtils.isEmpty(user.uid)) {
-                view.showLoggedInScreen()
-            }
+            view.showLoggedInScreen()
         }
     }
 
+    companion object {
+
+        private val TAG = LoginPresenterImpl::class.java.simpleName
+    }
 }

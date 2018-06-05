@@ -10,6 +10,6 @@ import com.everis.domain.model.User
 
 object UserModelDataMapper {
 
-    fun transform(user: User): UserModel = UserModel(user.uid, user.displayName, user.email, user.uid != null && !TextUtils.isEmpty(user.uid))
+    fun transform(user: User): UserModel = UserModel(user.uid!!, user.displayName!!, user.email!!, user.uid != null && !TextUtils.isEmpty(user.uid))
 
 }
