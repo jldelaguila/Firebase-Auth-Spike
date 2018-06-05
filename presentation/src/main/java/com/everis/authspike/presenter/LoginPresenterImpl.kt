@@ -1,12 +1,10 @@
 package com.everis.authspike.presenter
 
-import android.text.TextUtils
 import android.util.Log
 
 import com.everis.authspike.UIThread
-import com.everis.authspike.view.views.LoginView
+import com.everis.authspike.view.view.LoginView
 import com.everis.data.repository.UserDataRepository
-import com.everis.domain.interactor.CreateUser
 import com.everis.domain.interactor.SignIn
 import com.everis.domain.model.User
 

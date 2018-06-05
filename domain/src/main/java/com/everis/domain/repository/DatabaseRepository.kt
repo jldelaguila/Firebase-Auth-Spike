@@ -14,5 +14,6 @@ interface DatabaseRepository {
     fun getUserByPhoneQuery(phoneNumber: String): Observable<P2PUser>
     fun syncUserContacts(localContacts: List<LocalContact>, isByQuery: Boolean): Observable<P2PUser>
     fun observeRemoveValue(collection: String, node: String): Observable<Void>
+    fun updateUser(url : String, phone : String) : Observable<Unit>
 
 }

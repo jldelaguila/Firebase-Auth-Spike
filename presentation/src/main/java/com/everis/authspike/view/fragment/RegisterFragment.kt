@@ -13,11 +13,11 @@ import android.view.ViewGroup
 import com.everis.authspike.R
 import com.everis.authspike.presenter.RegisterPresenter
 import com.everis.authspike.view.activity.WelcomeActivity
-import com.everis.authspike.view.views.LoginView
+import com.everis.authspike.view.view.LoginView
 import kotlinx.android.synthetic.main.fragment_register.*
 
 
-class RegisterFragment : Fragment() , LoginView{
+class RegisterFragment : Fragment() , LoginView {
 
     lateinit var activity : WelcomeActivity
     lateinit var presenter : RegisterPresenter

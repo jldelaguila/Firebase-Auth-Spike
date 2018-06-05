@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 
 import com.everis.authspike.view.activity.WelcomeActivity
-import com.everis.authspike.view.views.LoginView
+import com.everis.authspike.view.view.LoginView
 
-class LoginFragment : Fragment() , LoginView{
+class LoginFragment : Fragment() , LoginView {
 
     lateinit var activity: WelcomeActivity
 

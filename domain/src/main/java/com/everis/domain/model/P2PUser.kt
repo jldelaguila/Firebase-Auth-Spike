@@ -11,6 +11,7 @@ class P2PUser {
     var firstName: String? = null
     var lastName: String? = null
     var isEnable: Boolean = false
+    var picture_url: String = ""
 
     override fun toString(): String {
         return phoneNumber!!

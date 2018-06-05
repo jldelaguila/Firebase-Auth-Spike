@@ -1,17 +1,22 @@
 package com.everis.data.repository
 
 import com.everis.data.model.FirebaseUserDataMapper
+import com.everis.data.network.firebase.FireBaseAuth
 import com.everis.data.network.firebase.FireBaseAuthImpl
+import com.everis.data.network.firebase.FireBaseStorage
+import com.everis.data.network.firebase.FireBaseStorageImpl
 import com.everis.domain.model.User
 import com.everis.domain.repository.UserRepository
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.storage.FirebaseStorage
 
 import rx.Observable
-import rx.functions.Func1
+import java.io.InputStream
 
-class UserDataRepository() : UserRepository {
+class UserDataRepository : UserRepository {
 
-    private val database: FireBaseAuthImpl = FireBaseAuthImpl()
+
+    private val database: FireBaseAuth = FireBaseAuthImpl()
+    private val storage: FireBaseStorage = FireBaseStorageImpl()
 
     override fun createUser(email: String, password: String): Observable<User> {
         return database.createUser(email, password).map { firebaseUser -> FirebaseUserDataMapper.transform(firebaseUser) }
@@ -36,6 +41,11 @@ class UserDataRepository() : UserRepository {
     override fun deleteUser(): Observable<Void> {
         return database.deleteUser()
     }
+
+    override fun uploadPicture(id: String,stream : InputStream): Observable<String> {
+        return storage.uploadFile(FirebaseStorage.getInstance().reference.child("pictures").child(id),stream)
+    }
+
 
 
 }
