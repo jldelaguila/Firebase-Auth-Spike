@@ -64,6 +64,9 @@ class RegisterFragment : BaseFragment() , LoginView{
                     val account = result.signInAccount
                     presenter.signInGoogle(account!!)
                 }
+                else{
+                    activity.hideLoading()
+                }
             }
         }
     }

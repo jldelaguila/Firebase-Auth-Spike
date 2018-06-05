@@ -38,7 +38,6 @@ class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
     }
 
     override fun signInGoogle(account: GoogleSignInAccount) {
-        val accountToken = account.idToken
         val credentials = GoogleAuthProvider.getCredential(account.idToken,null)
 
         FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {

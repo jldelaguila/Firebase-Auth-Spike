@@ -1,20 +1,17 @@
 package com.everis.authspike.presenter
 
-import android.text.TextUtils
 import android.util.Log
 
 import com.everis.authspike.UIThread
 import com.everis.authspike.view.views.LoginView
 import com.everis.data.repository.UserDataRepository
-import com.everis.domain.interactor.CreateUser
 import com.everis.domain.interactor.SignIn
 import com.everis.domain.model.User
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 import rx.Subscriber
-
-/**
- * Created by everis on 25/04/18.
- */
 
 class LoginPresenterImpl(private val view: LoginView) : LoginPresenter {
 
@@ -43,8 +40,20 @@ class LoginPresenterImpl(private val view: LoginView) : LoginPresenter {
         signInUseCase.execute(SignInUserSubscriber())
     }
 
+    override fun signInGoogle(account: GoogleSignInAccount) {
 
+        val credentials = GoogleAuthProvider.getCredential(account.idToken,null)
 
+        FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {
+            if(it.isSuccessful){
+                view.hideLoading()
+            }
+            else{
+                view.showLoggedInScreen()
+            }
+        }
+
+    }
 
     private inner class SignInUserSubscriber : Subscriber<User>() {
 

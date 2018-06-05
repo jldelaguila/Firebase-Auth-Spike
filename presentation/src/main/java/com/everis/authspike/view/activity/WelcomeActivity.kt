@@ -27,7 +27,7 @@ class WelcomeActivity : BaseActivity(), BaseView, GoogleApiClient.OnConnectionFa
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .build()
-        
+
         mGoogleSignInClient = GoogleApiClient.Builder(this)
                 .enableAutoManage(this,this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
@@ -59,6 +59,6 @@ class WelcomeActivity : BaseActivity(), BaseView, GoogleApiClient.OnConnectionFa
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
-
+        hideLoading()
     }
 }
