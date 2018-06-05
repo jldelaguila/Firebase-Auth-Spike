@@ -13,13 +13,10 @@ import kotlinx.android.synthetic.main.row_local_contacts.view.*
 import java.util.ArrayList
 
 
-/**
- * Created by everis on 3/05/18.
- */
-
 class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.LocalContactViewHolder>() {
 
     var contacts: List<ContactModel>? = null
+    var filteredList: Boolean = false
 
     init {
         contacts = ArrayList()

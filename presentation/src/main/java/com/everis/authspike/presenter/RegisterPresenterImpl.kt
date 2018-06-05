@@ -41,10 +41,9 @@ class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
         val credentials = GoogleAuthProvider.getCredential(account.idToken,null)
 
         FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {
+            view.hideLoading()
             if(it.isSuccessful){
-                view.hideLoading()
-            }
-            else{
+                view.safeActiveSession(true)
                 view.showLoggedInScreen()
             }
         }

@@ -1,7 +1,6 @@
 package com.everis.authspike.view.fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +16,12 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 import com.everis.authspike.view.activity.WelcomeActivity
 import com.everis.authspike.view.views.LoginView
-import kotlinx.android.synthetic.main.fragment_register.*
 import rx.functions.Action1
 
 class LoginFragment : BaseFragment() , LoginView{
 
     lateinit var activity: WelcomeActivity
 
-    lateinit var preferenceManager: PreferenceManager
     lateinit var presenter: LoginPresenter
     lateinit var navigator: Navigator
 
@@ -50,7 +47,6 @@ class LoginFragment : BaseFragment() , LoginView{
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        preferenceManager = PreferenceManager(activity)
         presenter = LoginPresenterImpl(this)
         navigator = activity.navigator
     }
@@ -99,15 +95,15 @@ class LoginFragment : BaseFragment() , LoginView{
         }
 
         tv_not_registered.setOnClickListener {
-            navigator!!.navigateToRegisterFragment()
+            navigator.navigateToRegisterFragment()
         }
     }
 
     private fun emailPasswordLogin() {
         val email = tiet_login_email!!.text.toString()
         val password = tiet_login_password!!.text.toString()
-        preferenceManager!!.setActiveSession(keep_session_checkbox!!.isChecked)
-        presenter!!.signInUser(email, password)
+        safeActiveSession(keep_session_checkbox!!.isChecked)
+        presenter.signInUser(email, password)
     }
 
     override fun showLoading() {
@@ -118,9 +114,13 @@ class LoginFragment : BaseFragment() , LoginView{
         activity.hideLoading()
     }
 
+    override fun safeActiveSession(active: Boolean) {
+        preferenceManager.setActiveSession(active)
+    }
+
 
     override fun showLoggedInScreen() {
-        navigator!!.navigateToHomeActivity()
+        navigator.navigateToHomeActivity()
     }
 
 }

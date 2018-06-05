@@ -83,6 +83,10 @@ class RegisterFragment : BaseFragment() , LoginView{
         activity.hideLoading()
     }
 
+    override fun safeActiveSession(active: Boolean) {
+        preferenceManager.setActiveSession(active)
+    }
+
     private fun initUI() {
         register_button.setOnClickListener {
             emailPasswordRegisterClicked()

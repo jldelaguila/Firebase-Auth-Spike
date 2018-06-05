@@ -45,17 +45,13 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         presenter = ContactsPresenterImpl(this, context!!)
+        presenter.getContactsListConfig()
         adapter = ContactsAdapter()
 
         contacts_rv.layoutManager = LinearLayoutManager(context!!)
         contacts_rv!!.adapter = adapter
         contacts_rv!!.addItemDecoration(DividerItemDecoration(context!!, DividerItemDecoration.VERTICAL))
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS).withListener(this).onSameThread().check()
     }
 
     override fun showLoading() {
@@ -66,6 +62,10 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener {
         contacts_progressbar!!.visibility = View.GONE
     }
 
+    override fun setListConfig(listConfig: Boolean) {
+        adapter.filteredList = listConfig
+        Dexter.withActivity(activity).withPermission(Manifest.permission.READ_CONTACTS).withListener(this).onSameThread().check()
+    }
 
     override fun setSync(user: P2PUser) {
         adapter.updateUser(user)

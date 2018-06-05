@@ -25,6 +25,7 @@ class WelcomeActivity : BaseActivity(), BaseView, GoogleApiClient.OnConnectionFa
         setContentView(R.layout.activity_register)
         navigator.navigateToLoginFragment(this)
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .build()
 
