@@ -1,15 +1,18 @@
 package com.everis.authspike.presenter
 
 import android.text.TextUtils
-import android.util.Log
 import com.everis.authspike.UIThread
 import com.everis.authspike.view.views.LoginView
 import com.everis.data.repository.UserDataRepository
 import com.everis.domain.interactor.CreateUser
 import com.everis.domain.model.User
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import rx.Subscriber
 
 class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
+
     override fun onPause() {
         //default implementation
     }
@@ -29,12 +32,27 @@ class RegisterPresenterImpl(val view :LoginView) : RegisterPresenter{
     private val createUserUseCase: CreateUser = CreateUser(UIThread(), UserDataRepository())
 
     override fun createUser(email: String, password: String) {
-        this.view.showLoading()
         createUserUseCase.bindParams(email, password)
         createUserUseCase.execute(CreateUserSubscriber())
     }
 
+    override fun signInGoogle(account: GoogleSignInAccount) {
+        val credentials = GoogleAuthProvider.getCredential(account.idToken,null)
+        FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {
+            if(it.isSuccessful){
+                view.hideLoading()
+            }
+            else{
+                view.showLoggedInScreen()
+            }
+        }
+    }
+
     private inner class CreateUserSubscriber : Subscriber<User>() {
+
+        override fun onStart() {
+            view.showLoading()
+        }
 
         override fun onCompleted() {
             view.hideLoading()

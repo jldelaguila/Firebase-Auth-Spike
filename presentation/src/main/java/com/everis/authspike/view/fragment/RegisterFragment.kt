@@ -14,12 +14,14 @@ import android.view.ViewGroup
 import com.everis.authspike.R
 import com.everis.authspike.navigator.Navigator
 import com.everis.authspike.presenter.RegisterPresenterImpl
+import com.everis.authspike.utils.Event
 import com.everis.authspike.view.activity.WelcomeActivity
 import com.everis.authspike.view.views.LoginView
 import kotlinx.android.synthetic.main.fragment_register.*
+import rx.functions.Action1
 
 
-class RegisterFragment : Fragment() , LoginView{
+class RegisterFragment : BaseFragment() , LoginView{
 
     lateinit var activity : WelcomeActivity
     var presenter = RegisterPresenterImpl(this)
@@ -45,6 +47,30 @@ class RegisterFragment : Fragment() , LoginView{
         initUI()
     }
 
+    override fun onStart() {
+        super.onStart()
+        subscribeBus()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unsubscribeBus()
+    }
+
+    override fun getBusAction(): Action1<Any>? {
+        return Action1{
+            if(it is Event.GoogleSignInEvent){
+                val event: Event.GoogleSignInEvent = it
+                val result = event.signInResult
+
+                if(result!!.isSuccess){
+                    val account = result.signInAccount
+                    presenter.signInGoogle(account!!)
+                }
+            }
+        }
+    }
+
     override fun showLoggedInScreen() {
         navigator.navigateToHomeActivity(activity)
     }
@@ -60,6 +86,11 @@ class RegisterFragment : Fragment() , LoginView{
     private fun initUI() {
         register_button.setOnClickListener {
             emailPasswordRegisterClicked()
+        }
+
+        google_button.setOnClickListener{
+            showLoading()
+            activity.googleSignIn()
         }
 
         tiet_password.onChange {
@@ -89,7 +120,7 @@ class RegisterFragment : Fragment() , LoginView{
             tiet_password.setError("Invalid password")
         }
         else{
-            presenter!!.createUser(email, password)
+            presenter.createUser(email, password)
         }
 
     }

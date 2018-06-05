@@ -21,8 +21,6 @@ t
 Dpresentation/src/main/java/com/everis/authspike/model/UserModel.java,a/1/a1a771447a2f1bf8553af2220f35566850668886
 ~
 Npresentation/src/main/java/com/everis/authspike/model/UserModelDataMapper.java,1/4/14fc41f9a1adc21153ec65b074d2a8c3f87369b2
-
-Opresentation/src/main/java/com/everis/authspike/view/activity/BaseActivity.java,7/7/775bca3290ae51a9bd89b3b489233631d2abde38
 b
 2presentation/src/main/res/layout/activity_home.xml,1/9/19ef9b60f7290ef73e644513aade9c835aab6328
 |
@@ -159,3 +157,9 @@ Opresentation/src/main/java/com/everis/authspike/presenter/LoginPresenterImpl.kt
 Rpresentation/src/main/java/com/everis/authspike/presenter/RegisterPresenterImpl.kt,9/3/93df781c35f4c4a4202134016c0c9db5f75790d5
 v
 Fpresentation/src/main/java/com/everis/authspike/navigator/Navigator.kt,b/6/b6b286298a50d6a5e2bdf1e015a7f60b55adf81c
+n
+>presentation/src/main/java/com/everis/authspike/utils/RxBus.kt,0/d/0dce509bd8e18eae9c61cabb2a914c9d61f147f9
+}
+Mpresentation/src/main/java/com/everis/authspike/view/fragment/BaseFragment.kt,a/7/a75f58d45619135fa8fab94dcb434cb2dec97e47
+n
+>presentation/src/main/java/com/everis/authspike/utils/Event.kt,1/8/1836ba262c04457edd77609acecec9bf5b04b93e
