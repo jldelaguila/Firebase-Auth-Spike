@@ -11,6 +11,7 @@ import com.everis.authspike.view.view.HomeView
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.firebase.auth.FirebaseAuth
 
 
 class HomeActivity : BaseActivity(), HomeView {
@@ -32,6 +33,8 @@ class HomeActivity : BaseActivity(), HomeView {
                 .build()
 
         presenter = HomePresenterImpl(this)
+        presenter.loadUserEnabled(FirebaseAuth.getInstance().currentUser!!.uid)
+
         navigator.navigateToContactsFragment()
     }
 
@@ -66,6 +69,11 @@ class HomeActivity : BaseActivity(), HomeView {
     override fun logOut() {
         Auth.GoogleSignInApi.signOut(mGoogleSignInClient)
         navigator.navigateToRegisterActivity()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
     }
 
 

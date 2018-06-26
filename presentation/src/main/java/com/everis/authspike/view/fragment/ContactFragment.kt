@@ -98,4 +98,9 @@ class ContactFragment : Fragment(), ContactsView, PermissionListener, OnClickLis
         activity.navigator.navigateToProfileActivity(phone, url)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.onDestroy()
+    }
+
 }

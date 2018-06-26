@@ -14,8 +14,6 @@ class AuthSpikeApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
-
         initCrashlytics()
     }
 
